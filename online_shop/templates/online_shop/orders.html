@@ -1,0 +1,105 @@
+{% extends 'online_shop/base.html' %}
+
+{% load static %}
+
+{% block title %}Заказы{% endblock %}
+
+{% block content %}
+  {% include 'online_shop/navbar.html' %}
+
+  <section class="orders">
+    <div class="container">
+      <div class="orders-wrapper">
+        {% if not orders %}
+          <h2 class="orders__title">У Вас еще нет заказов.
+            <a href="{% url 'main' %}" class="orders__link">Начните делать покупки прямо сейчас!</a>
+          </h2>
+        {% else %}
+          <div class="orders-table-wrapper">
+            <table class="orders-table">
+              <tr class="orders-table__tr">
+                <th class="orders-table__th">Номер заказа</th>
+                <th class="orders-table__th">Статус</th>
+                <th class="orders-table__th">Товары</th>
+                <th class="orders-table__th">Сумма</th>
+                <th class="orders-table__th">Действие</th>
+              </tr>
+              {% for order in orders %}
+                <tr class="orders-table__tr">
+                <td class="orders-table__td">{{ order.id }}</td>
+                <td class="orders-table__td">{{ order.get_status_display }}</td>
+                <td class="orders-table__td">
+                  <ul class="orders-table-list">
+                    {% for product in order.cart.products.all %}
+                      <li class="orders-table-list__item">&#9679; {{ product.product.title }} x {{ product.qty }}</li>
+                    {% endfor %}
+                  </ul>
+                </td>
+                <td class="orders-table__td">{{ order.cart.final_price }} р</td>
+                <td class="orders-table__td">
+                  <button class="orders__button modal__button" data-target="#exampleModal-{{ order.id }}">Дополнительно</button>
+                  <div class="modal" id="exampleModal-{{ order.id }}">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h3 class="modal__title">Детали заказа</h3>
+                        <button class="modal__close">&times;</button>
+                      </div>
+                      <!-- /.modal-header -->
+                      <div class="modal-table-wrapper">
+                        <table class="modal-table">
+                          <tr class="modal-table__tr">
+                            <th class="modal-table__th">Изображение</th>
+                            <th class="modal-table__th">Название</th>
+                            <th class="modal-table__th">Количество</th>
+                            <th class="modal-table__th">Цена</th>
+                          </tr>
+                          {% for product in order.cart.products.all %}
+                            <tr class="modal-table__tr">
+                              <td class="modal-table__td">
+                                <img src="{{ product.product.image.url }}" alt="Image: {{ product.product.title }}" class="modal-table__image">
+                              </td>
+                              <td class="modal-table__td">{{ product.product.title }}</td>
+                              <td class="modal-table__td">{{ product.qty }}</td>
+                              <td class="modal-table__td">{{ product.final_price }} р</td>
+                            </tr>
+                          {% endfor %}
+                        </table>
+                        <!-- /.modal-table -->
+                      </div>
+                      <!-- /.modal-table-wrapper -->
+                      <div class="modal-result">
+                        <div class="modal-result-wrapper">
+                          <span class="modal__sum"><b class="bold">Итог:</b> {{ order.cart.final_price }} р
+                          </span>
+                        </div>
+                        <!-- /.modal-result-wrapper -->
+                      </div>
+                      <!-- /.modal-result -->
+                    </div>
+                    <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal -->
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+            <!-- /.orders-table -->
+          </div>
+          <!-- /.orders-table-wrapper -->
+        {% endif %}
+      </div>
+      <!-- /.orders-wrapper -->
+    </div>
+    <!-- /.container -->
+  </section>
+  <!-- /.orders -->
+
+  <div class="split-line"></div>
+  <!-- /.splitline -->
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/modal_orders.js' %}"></script>
+
+{% endblock %}

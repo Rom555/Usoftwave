@@ -1,0 +1,72 @@
+{% extends 'online_shop/base.html' %}
+
+{% block title %}{{ product.title }}{% endblock %}
+
+{% block content %}
+  {% include 'online_shop/navbar.html' %}
+  <div class="breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb-list">
+        <li class="breadcrumb-list__item">
+          <a class="breadcrumb-list__link" href="{% url 'main' %}">Главная</a>
+        </li>
+        {% if past_page %}
+          <li class="breadcrumb-list__item">
+            <a class="breadcrumb-list__link" href="{{ past_page.get_absolute_url }}">{{ past_page.name }}</a>
+          </li>
+        {% endif %}
+        <li class="breadcrumb-list__item">
+          {{ product.title }}
+        </li>
+      </ul>
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.breadcrumb -->
+
+  <div class="product">
+    <div class="container">
+      <div class="product-wrapper">
+        <div class="product__image-wrapper">
+          <img src="{{ product.image.url }}" alt="Изображение: {{ product.title }}" class="product__image">
+          <span class="product__image-title">
+            <span class="bold">Разработчик:</span>
+            <div>{{ product.developer.name }}</div>
+          </span>
+        </div>
+        <!-- /.product__image-wrapper -->
+        <div class="product__info">
+          <h1 class="product__title">{{ product.title }}</h1>
+          <div class="product__price-wrapper">
+            {% if not product.sale %}
+              <span class="product__price">{{ product.price }} р</span>
+            {% else %}
+              <span class="product__price product__price_sale">{{ product.price }} р</span>
+              <span class="product__sale">{{ product.sale_price }} р</span>
+            {% endif %}
+          </div>
+          <h3 class="product__title product__title_min">Описание</h3>
+          <div class="product__description">
+            {{ product.description }}
+          </div>
+          <!-- /.product-description -->
+          <div class="product__details">
+            <span class="product__detail"><span class="bold">Категория: </span>{{ product.category.name }}</span>
+            <span class="product__detail"><span class="bold">Язык интерфейса: </span>{{ product.ui_languages }}</span>
+            <span class="product__detail"><span class="bold">Операционные системы: </span>{{ product.os }}</span>
+            <span class="product__detail"><span class="bold">Время лицензии: </span>{{ product.license_time }}</span>
+          </div>
+          <!-- /.product__details -->
+          <a href="{% url 'add_to_cart' slug=product.slug %}" class="product__button">Добавить в корзину</a>
+        </div>
+        <!-- /.product-info -->
+      </div>
+      <!-- /.product-wrapper -->
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.product -->
+
+  <div class="split-line"></div>
+  <!-- /.splitline -->
+{% endblock %}

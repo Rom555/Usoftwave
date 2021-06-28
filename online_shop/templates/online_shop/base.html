@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="shortcut icon" href="{% static 'img/favicon/favicon2.ico' %}" type="image/x-icon">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-wrapper">
+        <a href="{% url 'main' %}" class="logo">
+          <img src="{% static 'img/logo/logo.png' %}" alt="Логотип: Usoftwave" class="logo__image">
+        </a>
+        <ul class="header-menu">
+          <li class="header-menu__item"><a href="{% url 'main' %}" class="header-menu__link">Главная</a></li>
+          <li class="header-menu__item"><a href="#" class="header-menu__link">О магазине</a></li>
+          <li class="header-menu__item"><a href="#" class="header-menu__link">Документы</a></li>
+          <li class="header-menu__item"><a href="#" class="header-menu__link">Поддержка</a></li>
+        </ul>
+        <!-- /.header-menu -->
+        <div class="header__right-bar">
+          <form action="{% url 'search' %}" method="post" class="header__search">
+            {% csrf_token %}
+            <button class="header__search-button">
+              <img src="{% static 'img/icons/search.svg' %}" alt="Иконка: поиск" class="header__search-image">
+            </button>
+            <input type="text" name="search" class="header__search-input">
+          </form>
+          <!-- /.header__search -->
+          {% if not request.user.is_authenticated %}
+            <a href="{% url 'login' %}" class="header__login">
+              <img src="{% static 'img/icons/user.svg' %}" alt="Иконка: пользователь" class="header__login-image">
+              Войти
+            </a>
+          {% else %}
+            <div class="header-login-wrapper">
+              <div class="header__login">
+                <img src="{% static 'img/icons/user.svg' %}" alt="Иконка: пользователь" class="header__login-image">
+                {{ request.user.first_name }}
+              </div>
+              <div class="header-login">
+                <ul class="header-login-menu">
+                  <li class="header-login__item"><a href="{% url 'orders' %}" class="header-login__link">Заказы</a></li>
+                  <li class="header-login__item"><a href="{% url 'user_settings' %}" class="header-login__link">Настройки</a></li>
+                  <li class="header-login__item"><a href="{% url 'logout' %}" class="header-login__link">Выйти</a></li>
+                </ul>
+                <!-- /.header-login-menu -->
+              </div>
+              <!-- /.header-login -->
+            </div>
+            <!-- /.header-login-wrapper -->
+          {% endif %}
+          <a href="{% url 'cart' %}" class="header__cart">
+            <img src="{% static 'img/icons/cart.svg' %}" alt="Иконка: корзина" class="header__cart-image">
+            {% if cart.total_products > 0 and cart.total_products < 10 %}
+              <div class="header__cart-count">{{ cart.total_products }}</div>
+            {% elif cart.total_products > 0 %}
+              <div class="header__cart-count">9+</div>
+            {% endif %}
+          </a>
+        </div>
+        <!-- /.header__right-bar -->
+        <div class="header-links">
+          <ul class="header-menu header-links-menu">
+            <li class="header-menu__item"><a href="{% url 'main' %}" class="header-menu__link">Главная</a></li>
+            <li class="header-menu__item"><a href="#" class="header-menu__link">О магазине</a></li>
+            <li class="header-menu__item"><a href="#" class="header-menu__link">Документы</a></li>
+            <li class="header-menu__item"><a href="#" class="header-menu__link">Поддержка</a></li>
+            <li class="header-menu__item">
+              <form action="{% url 'search' %}" class="header__search">
+                {% csrf_token %}
+                <button class="header__search-button">
+                  <img src="{% static 'img/icons/search.svg' %}" alt="Иконка: поиск" class="header__search-image">
+                </button>
+                <input type="text" name="search" class="header__search-input">
+              </form>
+              <!-- /.header__search -->
+            </li>
+            <li class="header-menu__item">
+              {% if not request.user.is_authenticated %}
+                <a href="{% url 'login' %}" class="header__login">
+                  <img src="{% static 'img/icons/user.svg' %}" alt="Иконка: пользователь" class="header__login-image">
+                  Войти
+                </a>
+              {% else %}
+                <div class="header__login">
+                  <img src="{% static 'img/icons/user.svg' %}" alt="Иконка: пользователь" class="header__login-image">
+                  {{ request.user.first_name }}
+                </div>
+              {% endif %}
+            </li>
+            <li class="header-menu__item">
+              <a href="{% url 'cart' %}" class="header__cart">
+                <img src="{% static 'img/icons/cart.svg' %}" alt="Иконка: корзина" class="header__cart-image">
+                {% if cart.total_products > 0 and cart.total_products < 10 %}
+                  <div class="header__cart-count">{{ cart.total_products }}</div>
+                {% elif cart.total_products > 0 %}
+                  <div class="header__cart-count">9+</div>
+                {% endif %}
+                Корзина
+              </a>
+            </li>
+            {% if request.user.is_authenticated %}
+              <li class="header-menu__item"><a href="{% url 'orders' %}" class="header-menu__link">Заказы</a></li>
+              <li class="header-menu__item"><a href="{% url 'user_settings' %}" class="header-menu__link">Настройки</a></li>
+              <li class="header-menu__item"><a href="{% url 'logout' %}" class="header-menu__link">Выйти</a></li>
+            {% endif %}
+          </ul>
+          <button class="header-button">
+            <img src="{% static 'img/icons/close.svg' %}" alt="Иконка: закрыть" />
+          </button>
+        </div>
+        <!-- /.header-links -->
+        <button class="menu-button header__menu-button">
+          <span class="menu-button__line"></span>
+          <span class="menu-button__line"></span>
+          <span class="menu-button__line"></span>
+        </button>
+      </div>
+      <!-- /.header-wrapper -->
+    </div>
+    <!-- /.container -->
+  </header>
+
+  {% block content %}{% endblock %}
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer__info">
+          <a href="{% url 'main' %}" class="logo">
+            <img src="{% static 'img/logo/logo2.png' %}" alt="Логотип: Usoftwave" class="logo__image" />
+          </a>
+          <p class="footer__text"
+            >Интернет-магазин лицензионного программного обеспечения. Специалисты Usoftwave оказывают покупателям различные консультации, связанные с покупкой лицензионного программного обеспечения. Продажа программного обеспечения — наша профессия!</p
+          >
+        </div>
+        <!-- /.footer__info -->
+
+        <div class="footer__social">
+          <a
+            href="https://ru-ru.facebook.com"
+            target="_blank"
+            class="footer__social-link"
+            ><img
+              src="{% static 'img/icons/facebook.svg' %}"
+              alt="Иконка: facebook"
+              class="footer__social-icon"
+          /></a>
+          <a
+            href="https://mail.google.com/"
+            target="_blank"
+            class="footer__social-link"
+            ><img
+              src="{% static 'img/icons/google.svg' %}"
+              alt="Иконка: google"
+              class="footer__social-icon"
+          /></a>
+          <a
+            href="https://www.instagram.com/"
+            target="_blank"
+            class="footer__social-link"
+            ><img
+              src="{% static 'img/icons/instagram.svg' %}"
+              alt="Иконка: instagram"
+              class="footer__social-icon"
+          /></a>
+          <a
+            href="https://twitter.com/"
+            target="_blank"
+            class="footer__social-link"
+            ><img
+              src="{% static 'img/icons/twitter.svg' %}"
+              alt="Иконка: twitter"
+              class="footer__social-icon"
+          /></a>
+        </div>
+        <!-- /.footer__social -->
+
+        <div class="footer__list footer__product">
+          <h3 class="footer__title">Продукты</h3>
+          <ul class="footer__ul">
+            <li class="footer__item">
+              <a href="{% url 'category' slug='antivirus' %}" class="footer__link">Антивирусы</a>
+            </li>
+            <li class="footer__item">
+              <a href="{% url 'developer' slug='microsoft' %}" class="footer__link">Microsoft</a>
+            </li>
+            <li class="footer__item">
+              <a href="{% url 'category' slug='graphics_editor' %}" class="footer__link">Графические редакторы</a>
+            </li>
+            <li class="footer__item">
+              <a href="{% url 'category' slug='soft' %}" class="footer__link">Софт</a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.footer-list footer__product -->
+
+        <div class="footer__list footer__sale">
+          <h3 class="footer__title">Акции</h3>
+          <ul class="footer__ul">
+            <li class="footer__item">
+              <a href="#" class="footer__link">Получить скидку</a>
+            </li>
+            <li class="footer__item">
+              <a href="#" class="footer__link">Специальные предложения</a>
+            </li>
+            <li class="footer__item">
+              <a href="#" class="footer__link">Распродажа</a>
+            </li>
+            <li class="footer__item">
+              <a href="#" class="footer__link">Рассылки</a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.footer-list footer__sale -->
+
+        <div class="footer__list footer__support">
+          <h3 class="footer__title">Поддержка</h3>
+          <ul class="footer__ul">
+            <li class="footer__item">
+              <a href="#" class="footer__link">Оформление заказа</a>
+            </li>
+            <li class="footer__item">
+              <a href="#" class="footer__link">Оплата заказа</a>
+            </li>
+            <li class="footer__item">
+              <a href="#" class="footer__link">Доставка заказа</a>
+            </li>
+            <li class="footer__item">
+              <a href="#" class="footer__link">Помощь</a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.footer-list footer__support -->
+
+        <div class="footer__number1">
+          <a href="tel:89272132233" class="footer__number">8 (927) 213-22-33</a>
+          <span class="footer__number-info">Для бесплатных звонков из регионов России</span>
+        </div>
+        <!-- /.footer__number1 -->
+
+        <div class="footer__number2">
+          <a href="tel:89992002022" class="footer__number">8 (999) 200-20-22</a>
+          <span class="footer__number-info">Для Москвы</span>
+        </div>
+        <!-- /.footer__number2 -->
+      </div>
+      <!-- /.footer-top -->
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+  <script src="{% static 'js/modal.js' %}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

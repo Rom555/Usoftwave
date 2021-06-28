@@ -1,0 +1,244 @@
+{% extends 'online_shop/base.html' %}
+
+{% load static %}
+
+{% block title %}Usoftwave{% endblock %}
+
+{% block content %}
+  {% include 'online_shop/navbar.html' %}
+
+  <div class="sale">
+    <div class="container">
+       <div class="sale-slider swiper-container">
+          <div class="sale-slider-wrapper swiper-wrapper">
+            <div class="sale-slider__item swiper-slide">
+              <img
+                    class="sale-slider__img"
+                    src="{% static 'img/images/sale1.jpg' %}"
+                    alt="sale"
+                  />
+            </div>
+            <!-- /.sale-slider__item -->
+            <div class="sale-slider__item swiper-slide">
+              <img
+                    class="sale-slider__img"
+                    src="{% static 'img/images/sale2.jpg' %}"
+                    alt="sale"
+                  />
+            </div>
+            <!-- /.sale-slider__item -->
+            <div class="sale-slider__item swiper-slide">
+              <img
+                    class="sale-slider__img"
+                    src="{% static 'img/images/sale3.jpg' %}"
+                    alt="sale"
+                  />
+            </div>
+            <!-- /.sale-slider__item -->
+          </div>
+
+          <div class="sale-slider__button sale-slider__button--prev"></div>
+          <div class="sale-slider__button sale-slider__button--next"></div>
+        </div>
+        <!-- /.sale-slider -->
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.sale -->
+
+  <section class="section section_middle">
+    <div class="container">
+      <a href="#" class="section__title section__title_light">Новинки</a>
+      <div class="section-wrapper">
+        {% for product in new_products %}
+          <a href="{{ product.get_absolute_url }}" class="card-product">
+            <img src="{{ product.image.url }}" alt="Изображение: {{ product.slug }}" class="card-product__image">
+            <h4 class="card-product__title">{{ product.title }}</h4>
+
+            <div class="card-product__prices">
+              {% if not product.sale %}
+                <p class="card-product__price">{{ product.price }} р</p>
+              {% else %}
+                <p class="card-product__price card-product__price_sale">{{ product.price }} р</p>
+                <p class="card-product__sale">{{ product.sale_price }} р</p>
+              {% endif %}
+            </div>
+            <!-- /.card-product__price -->
+          </a>
+          <!-- /.card-product -->
+        {% endfor %}
+      </div>
+      <!-- /.section-wrapper -->
+    </div>
+    <!-- /.container -->
+  </section>
+  <!-- /.section section--middle -->
+
+  <section class="section">
+    <div class="container">
+      <a href="#" class="section__title">Разработчики</a>
+      <div class="section-wrapper_grid">
+        <a href="{% url 'developer' slug='kaspersky' %}" class="card-developer">
+          <img src="{% static 'img/icons/kaspersky.svg' %}" alt="Изображение: Лаборатория Касперсокго" class="card-developer__image">
+        </a>
+        <!-- /.card-developer -->
+        <a href="{% url 'developer' slug='adobe' %}" class="card-developer">
+          <img src="{% static 'img/icons/adobe.svg' %}" alt="Иображение: Adobe Systems" class="card-developer__image">
+        </a>
+        <!-- /.card-developer -->
+        <a href="{% url 'developer' slug='abbyy' %}" class="card-developer">
+          <img src="{% static 'img/icons/abbyy.svg' %}" alt="Иображение: ABBYY" class="card-developer__image">
+        </a>
+        <!-- /.card-developer -->
+        <a href="{% url 'developer' slug='microsoft' %}" class="card-developer">
+          <img src="{% static 'img/icons/microsoft.svg' %}" alt="Иображение: Microsoft Corporation" class="card-developer__image">
+        </a>
+        <!-- /.card-developer -->
+        <a href="{% url 'developer' slug='corel' %}" class="card-developer">
+          <img src="{% static 'img/icons/corel.svg' %}" alt="Иображение: Corel Corporation" class="card-developer__image">
+        </a>
+        <!-- /.card-developer -->
+        <a href="{% url 'developer' slug='dr_web' %}" class="card-developer">
+          <img src="{% static 'img/icons/drweb.svg' %}" alt="Иображение: Доктор Веб" class="card-developer__image">
+        </a>
+        <!-- /.card-developer -->
+        <a href="{% url 'developer' slug='autodesk' %}" class="card-developer">
+          <img src="{% static 'img/icons/autodesk.svg' %}" alt="Иображение: Autodesk" class="card-developer__image">
+        </a>
+        <!-- /.card-developer -->
+        <a href="{% url 'developer' slug='monokot' %}" class="card-developer">
+          <img src="{% static 'img/icons/monokot.svg' %}" alt="Иображение: Monokot" class="card-developer__image">
+        </a>
+        <!-- /.card-developer -->
+      </div>
+      <!-- /.section-wrapper -->
+    </div>
+    <!-- /.container -->
+  </section>
+  <!-- /.section -->
+
+  <section class="section section_light">
+    <div class="container">
+      <a href="{% url 'developer' slug='microsoft' %}" class="section__title section__title_light">Microsoft</a>
+      <div class="section-wrapper">
+        {% for product in microsoft_products %}
+          <a href="{{ product.get_absolute_url }}" class="card-product">
+          <img src="{{ product.image.url }}" alt="Изображение: {{ product.slug }}" class="card-product__image">
+          <h4 class="card-product__title">{{ product.title }}</h4>
+
+          <div class="card-product__prices">
+            {% if not product.sale %}
+              <p class="card-product__price">{{ product.price }} р</p>
+            {% else %}
+              <p class="card-product__price card-product__price_sale">{{ product.price }} р</p>
+              <p class="card-product__sale">{{ product.sale_price }} р</p>
+            {% endif %}
+          </div>
+          <!-- /.card-product__price -->
+        </a>
+          <!-- /.card-product -->
+        {% endfor %}
+      </div>
+      <!-- /.section-wrapper -->
+    </div>
+    <!-- /.container -->
+  </section>
+  <!-- /.section section_light -->
+
+  <section class="comments">
+    <div class="comments__swiper-container swiper-container">
+      <div class="comments__swiper-wrapper swiper-wrapper">
+        <div class="comments__swiper-slide swiper-slide">
+          <img
+            src="{% static 'img/icons/quote.svg' %}"
+            alt="Icon: quote"
+            class="comments__image"
+          />
+          <p class="comments__text">
+            Достоинства: Надёжный магазин, знаю его больше 10 лет!  Комментарий: Как-то купил программу видеонаблюдения, после замены операционки получил новый пароль.
+          </p>
+          <span class="comments__author">
+            <span class="comments__author-name">Сергей Ш.</span>
+          </span>
+        </div>
+        <!-- /.comments__swiper-slide -->
+
+        <div class="comments__swiper-slide swiper-slide">
+          <img
+            src="{% static 'img/icons/quote.svg' %}"
+            alt="Icon: quote"
+            class="comments__image"
+          />
+          <p class="comments__text">
+            Лучший интернет магазин, продающий лицензированное программное обеспечение по самым демократическим ценам. Существует накопительная система скидок и работает неплохой кэшбек от сторонних магазинов. Заказ приходит моментально на электронную почту и по смс.
+          </p>
+          <span class="comments__author">
+            <span class="comments__author-name">Синеев А.</span>
+          </span>
+        </div>
+        <!-- /.comments__swiper-slide -->
+
+        <div class="comments__swiper-slide swiper-slide">
+          <img
+            src="{% static 'img/icons/quote.svg' %}"
+            alt="Icon: quote"
+            class="comments__image"
+          />
+          <p class="comments__text">
+            Достоинства: Цифровые ключи сразу. Скидки на Office 365. Программа лояльности.
+          </p>
+          <span class="comments__author">
+            <span class="comments__author-name">Постнев В.</span>
+          </span>
+        </div>
+        <!-- /.comments__swiper-slide -->
+      </div>
+      <!-- /.comments__swiper-wrapper -->
+
+      <div class="comments__swiper-pagination"></div>
+      <!-- /.comments__swiper-pagination -->
+    </div>
+    <!-- /.comments__swiper-container -->
+  </section>
+  <!-- /.comments -->
+
+  <section class="newsletter">
+    <div class="container">
+      <div class="newsletter-wrapper">
+        <div class="newsletter__left">
+          <h2 class="newsletter__title">Подпишитесь на нашу рассылку</h2>
+          <p class="newsletter__text">
+            Просто добавьте Ваш Email в поле рядом. И Вы будите получать от нас обновления об акциях и рассылку
+          </p>
+        </div>
+        <!-- /.newsletter__left -->
+        <form action="{% url 'mailing' %}" method="POST" class="newsletter__form">
+          {% csrf_token %}
+          <input
+            type="email"
+            class="newsletter__input"
+            placeholder="Email"
+            name="email"
+            required
+          />
+          {% if messages %}
+            {% for message in messages %}
+              <h2 class="invalid">{{ message }}</h2>
+            {% endfor %}
+          {% endif %}
+          <button class="newsletter__button">Подписаться</button>
+        </form>
+      </div>
+      <!-- /.newsletter-wrapper -->
+    </div>
+    <!-- /.container -->
+  </section>
+  <!-- /.newsletter -->
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'js/swiper.js' %}"></script>
+  <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+  <script src="{% static 'js/mailing_validate.js' %}"></script>
+{% endblock %}

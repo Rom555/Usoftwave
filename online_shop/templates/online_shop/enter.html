@@ -1,0 +1,38 @@
+{% extends 'online_shop/base.html' %}
+
+{% load static %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+
+  <div class="split-line"></div>
+  <!-- /.split-line -->
+
+
+  <div class="forms">
+    <div class="container">
+      <div class="forms-wrapper">
+        {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+        <form action="{% url 'login' %}" method="POST" class="forms__form">
+          {% csrf_token %}
+          <input type="text" name="username" class="forms__input" placeholder="Логин" minlength="2" required>
+          <input type="password" name="password" class="forms__input" placeholder="Пароль" minlength="4" required>
+          <button type="submit" class="forms__button">Войти</button>
+        </form>
+        <a href="{% url 'registration' %}" class="forms__link">Регистрация</a>
+      </div>
+      <!-- /.forms-wrapper -->
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.forms -->
+
+  <div class="split-line"></div>
+  <!-- /.split-line -->
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+  <script src="{% static 'js/enter_validate.js' %}"></script>
+{% endblock %}

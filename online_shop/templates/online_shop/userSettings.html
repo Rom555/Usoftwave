@@ -1,0 +1,43 @@
+{% extends 'online_shop/base.html' %}
+
+{% load static %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block content %}
+
+  {% include 'online_shop/navbar.html' %}
+
+  <div class="forms forms_p100">
+    <div class="container">
+      <div class="forms-wrapper">
+
+        {% if successful_message %}
+          <span style="color: green">{{ successful_message }}</span>
+        {% endif %}
+        {% for error in form.errors.values %}
+          {{ error }}
+        {% endfor %}
+
+        <form action="{% url 'user_settings' %}" method="POST" class="forms__form">
+          {% csrf_token %}
+          <input type="password" name="old_password" class="forms__input" placeholder="Старый пароль" minlength="4" required>
+          <input type="password" name="new_password1" class="forms__input" placeholder="Новый пароль" minlength="4" required>
+          <input type="password" name="new_password2" class="forms__input" placeholder="Повтор пароля" minlength="4" required>
+          <button type="submit" class="forms__button">Сохранить</button>
+        </form>
+      </div>
+      <!-- /.forms-wrapper -->
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.forms -->
+
+  <div class="split-line"></div>
+  <!-- /.splitline_light -->
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+  <script src="{% static 'js/settings_validate.js' %}"></script>
+{% endblock %}

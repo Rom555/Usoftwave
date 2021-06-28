@@ -1,0 +1,55 @@
+{% extends 'online_shop/base.html' %}
+
+{% block title %}{{ info.name }}{% endblock %}
+
+{% block content %}
+  {% include 'online_shop/navbar.html' %}
+
+  <div class="breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb-list">
+        <li class="breadcrumb-list__item">
+          <a class="breadcrumb-list__link" href="{% url 'main' %}">Главная</a>
+        </li>
+        <li class="breadcrumb-list__item">
+          {{ info.name }}
+        </li>
+      </ul>
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.breadcrumb -->
+
+  <section class="section">
+    <div class="container container_min">
+      <h2 class="section__title section__title_big">{{ info.name }}</h2>
+      {% if not info_products %}
+        <span class="section__info">Ничего не найдено</span>
+      {% else %}
+        <div class="section-wrapper_grid section-wrapper_catalog">
+          {% for product in info_products %}
+            <a href="{{ product.get_absolute_url }}" class="card-product card-product_light card-product_mb3 card-product_catalog">
+              <img src="{{ product.image.url }}" alt="Изображение: {{ product.title }}" class="card-product__image">
+              <h4 class="card-product__title">{{ product.title }}</h4>
+              <div class="card-product__prices">
+                {% if not product.sale %}
+                  <p class="card-product__price">{{ product.price }} р</p>
+                {% else %}
+                  <p class="card-product__price card-product__price_sale">{{ product.price }} р</p>
+                  <p class="card-product__sale">{{ product.sale_price }} р</p>
+                {% endif %}
+              </div>
+              <!-- /.card-product__price -->
+            </a>
+            <!-- /.card-product -->
+          {% endfor %}
+        </div>
+        <!-- /.section-wrapper -->
+      {% endif %}
+    </div>
+    <!-- /.container -->
+  </section>
+
+  <div class="split-line"></div>
+  <!-- /.splitline -->
+{% endblock %}

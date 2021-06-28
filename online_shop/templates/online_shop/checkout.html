@@ -1,0 +1,105 @@
+{% extends 'online_shop/base.html' %}
+
+{% load static %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+
+  {% include 'online_shop/navbar.html' %}
+
+  <section class="checkout">
+    <div class="container">
+      <div class="checkout-wrapper">
+      {% if messages %}
+        {% for message in messages %}
+          <h2 class="checkout__title">{{ message }}</h2>
+        {% endfor %}
+      {% else %}
+        <h2 class="checkout__title">Оформление заказа</h2>
+        <div class="checkout-table-wrapper">
+          <table class="checkout-table">
+            <tr class="checkout-table__tr">
+              <th class="checkout-table__th">Изображение</th>
+              <th class="checkout-table__th">Название</th>
+              <th class="checkout-table__th">Количество</th>
+              <th class="checkout-table__th">Цена</th>
+              <th class="checkout-table__th">Общая цена</th>
+            </tr>
+            {% for cart_product in cart.products.all %}
+              <tr class="checkout-table__tr">
+                <td class="checkout-table__td">
+                  <img src="{{ cart_product.product.image.url }}" alt="Image: {{ cart_product.product.title }}" class="checkout-table__image">
+                </td>
+                <td class="checkout-table__td">{{ cart_product.product.title }}</td>
+                <td class="checkout-table__td">{{ cart_product.qty }}</td>
+                <td class="checkout-table__td">{{ cart_product.product.price }} р</td>
+                <td class="checkout-table__td">{{ cart_product.final_price }} р</td>
+              </tr>
+            {% endfor %}
+          </table>
+          <!-- /.checkout-table -->
+        </div>
+        <!-- /.checkout-table-wrapper -->
+        <div class="checkout-result">
+          <div class="checkout-result-wrapper">
+            <span class="checkout__sum"><b class="bold">Итог:</b> {{ cart.final_price }} р
+            </span>
+          </div>
+          <!-- /.checkout-result-wrapper -->
+        </div>
+        <!-- /.checkout-result -->
+        <h2 class="checkout__title">Форма заказа</h2>
+        <div class="checkout-form-wrapper">
+          <div class="checkout-form">
+            <h4 class="checkout-forms__title">Оформить заказ</h4>
+            <form action="{% url 'make_order' %}" method="post" class="forms__form">
+              {% csrf_token %}
+              <label for="checkout2" class="forms__label">Комментарий к заказу</label>
+              <textarea name="comment" id="checkout2" cols="30" rows="10" placeholder="Комментарий к заказу" class="forms__textarea checkout__input"></textarea>
+              <button class="forms__button checkout__button">Оформить</button>
+            </form>
+          </div>
+          <!-- /.checkout-form -->
+          <div class="checkout-form">
+            <h4 class="checkout-forms__title">Оплатить заказ по карте</h4>
+            <form id="payment-form" name="order" class="checkout__payment">
+              <div id="card-element">
+                <!-- Elements will create input elements here -->
+              </div>
+
+              <!-- We'll put the error messages in this element -->
+              <div id="card-errors" role="alert"></div>
+
+              <button
+                  type="submit"
+                  data-username="{{ cart.owner.user.username }}"
+                  class="checkout__button"
+                  style="margin-top: 20px;"
+                  id="card-button"
+                  data-secret="{{ client_secret }}">Оплатить</button>
+            </form>
+          </div>
+          <!-- /.checkout-form -->
+        </div>
+        <!-- /.checkout_form-wrapper -->
+      {% endif %}
+      </div>
+      <!-- /.checkout-wrapper -->
+    </div>
+    <!-- /.container -->
+  </section>
+  <!-- /.checkout -->
+
+  <div class="split-line"></div>
+  <!-- /.splitline -->
+
+
+{% endblock %}
+
+{% block scripts %}
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="{% static 'js/stripe.js' %}"></script>
+
+{% endblock %}

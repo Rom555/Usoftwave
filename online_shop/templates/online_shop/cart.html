@@ -1,0 +1,75 @@
+{% extends 'online_shop/base.html' %}
+
+{% load static %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+  {% include 'online_shop/navbar.html' %}
+
+  <section class="cart">
+    <div class="container">
+      <div class="cart-wrapper">
+        {% if cart.total_products > 0 %}
+          <div class="cart-table-wrapper">
+            <table class="cart-table">
+              <tr class="cart-table__tr">
+                <th class="cart-table__th">Изображение</th>
+                <th class="cart-table__th">Название</th>
+                <th class="cart-table__th">Количество</th>
+                <th class="cart-table__th">Цена</th>
+                <th class="cart-table__th">Действие</th>
+              </tr>
+              {% for item in cart.products.all %}
+                <tr class="cart-table__tr">
+                  <td class="cart-table__td">
+                    <img src="{{ item.product.image.url }}" alt="Изображение: {{ item.product.title }}" class="cart-table__image">
+                  </td>
+                  <td class="cart-table__td">{{ item.product.title }}</td>
+                  <td class="cart-table__td">
+                    <form action="{% url 'change_qty' slug=item.product.slug %}" method="POST" class="cart-table__form">
+                      {% csrf_token %}
+                      <button type="button" class="cart-table__form-button cart-table__form-button_left">&minus;</button>
+                       <input type="number" name="qty" class="cart-table__input" value="{{ item.qty }}" min="1" max="99" required>
+                      <button type="button" class="cart-table__form-button cart-table__form-button_right">&plus;</button>
+                      <button type="submit" class="cart__button">Изменить</button>
+                    </form>
+                  </td>
+                  <td class="cart-table__td">{{ item.final_price }}&nbsp;р</td>
+                  <td class="cart-table__td">
+                    <a href="{% url 'delete_from_cart' slug=item.product.slug %}" class="cart__button">Удалить</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+            <!-- /.cart-table -->
+          </div>
+          <!-- /.cart-table-wrapper -->
+          <div class="cart-result">
+            <div class="cart-result-wrapper">
+              <span class="cart__sum"><b class="bold">Итог: </b>{{ cart.final_price }} р
+              </span>
+              {% if not cart.for_anonymous_user %}
+                <a href="{% url 'checkout' %}" class="cart__button cart__button_big">Заказать</a>
+              {% endif %}
+            </div>
+            <!-- /.cart-result-wrapper -->
+          </div>
+          <!-- /.cart-result -->
+        {% else %}
+          <h2 class="cart__title">Корзина пуста</h2>
+        {% endif %}
+      </div>
+      <!-- /.cart-wrapper -->
+    </div>
+    <!-- /.container -->
+  </section>
+  <!-- /.cart -->
+
+  <div class="split-line"></div>
+  <!-- /.splitline -->
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/change_qty.js' %}"></script>
+{% endblock %}
